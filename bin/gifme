@@ -1,0 +1,77 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+
+options = {
+  :output   => "#{ENV['HOME']}/Desktop/animated.gif",
+  :reverse  => false,
+  :resize   => true,
+  :delay    => 20,
+  :cloudapp => system("which cloudapp 2>&1 > /dev/null")
+}
+
+parser = OptionParser.new do |opts|
+  opts.banner = "Usage: gifme [options] FILES"
+
+  opts.separator ""
+  opts.separator "  FILES can be listed out, like `file1.jpg file2.jpg`, or it"
+  opts.separator "  can be a normal shell glob, like `*.jpg`."
+
+  opts.separator ""
+  opts.separator "Options:"
+
+  opts.on("-r", "--reverse", "Reverse the GIF to make it loopable") do |reverse|
+    options[:reverse] = true
+  end
+
+  opts.on("-o", "--output /path/to/output", "Set the animation's output directory") do |out|
+    options[:output] = out
+  end
+
+  opts.on("-d", "--delay DELAY", "Set the delay between frames (default: 20)") do |delay|
+    options[:delay] = delay
+  end
+
+  opts.on("--noresize", "Don't resize the final animation (set to 500px wide") do |nrs|
+    options[:resize] = false
+  end
+
+  opts.on("-h", "--help", "Show this message") do
+    puts opts
+    exit
+  end
+end
+
+parser.parse!
+args = *ARGV.join(" ")
+
+unless system("which convert 2>&1 > /dev/null")
+  puts "You need to install ImageMagick first.\n\n"
+  puts "If you're on a Mac, this should be as easy as:"
+  puts "  brew install imagemagick"
+  exit(1)
+end
+
+unless args
+  puts parser.help
+  exit(1)
+end
+
+cmd  = "convert"
+cmd += " -delay #{options[:delay]}"
+cmd += " -loop 0"
+cmd += " -resize 500"                   if options[:resize]
+cmd += " -layers OptimizeTransparency"
+cmd += " #{args}"
+cmd += " #{options[:output]}"
+
+if system(cmd)
+  puts "You now have a handsome animation at #{options[:output]}"
+else
+  puts "Something broke when we were animating your gif. Shit."
+end
+
+if options[:cloudapp]
+  puts "Now we're uploading it to CloudApp"
+  system "cloudapp #{options[:output]}"
+end
