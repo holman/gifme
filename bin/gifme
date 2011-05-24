@@ -49,7 +49,7 @@ parser = OptionParser.new do |opts|
 end
 
 parser.parse!
-args = *ARGV.collect{|a| escape a}.join(" ")
+files = *ARGV.collect{|a| escape a}
 
 unless system("which convert 2>&1 > /dev/null")
   puts "You need to install ImageMagick first.\n\n"
@@ -58,7 +58,7 @@ unless system("which convert 2>&1 > /dev/null")
   exit(1)
 end
 
-unless args
+unless files
   puts parser.help
   exit(1)
 end
@@ -68,7 +68,15 @@ cmd += " -delay #{options[:delay]}"
 cmd += " -loop 0"
 cmd += " -resize 500"                   if options[:resize]
 cmd += " -layers OptimizeTransparency"
-cmd += " #{args}"
+cmd += " #{files.join(' ')}"
+
+if options[:reverse]
+  files = files.drop(1)         # we don't want to dupe the end
+  files = files.reverse
+  files = files.drop(1)         # we don't want to dupe the middle
+  cmd += " #{files.join(' ')}"
+end
+
 cmd += " #{options[:output]}"
 
 if system(cmd)

@@ -35,8 +35,14 @@ script installed, we'll use that, otherwise we'll just skip this whole step.
 
 ## Super Advanced Usage
 
-There's a few options you have available to you to let you tweak how your gif
-is created. Just run:
+On some gifs, it's nice to have a smooth loop, so when it ends there's not a
+jarring leap from the last frame to the first frame again. Use the `--reverse`
+switch to create the animation like normal, and then reverse the frames and add
+them to the animation so it looks like one smooth motion and back again.
+
+    gifme FILES --reverse
+
+For other options, check out the help:
 
     gifme -h
 
