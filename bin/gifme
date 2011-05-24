@@ -2,6 +2,12 @@
 
 require 'optparse'
 
+def escape(str)
+  String(str).gsub(/(?=[^a-zA-Z0-9_.\/\-\x7F-\xFF\n])/n, '\\').
+              gsub(/\n/,"'\n'").
+              sub(/^$/,"''")
+end
+
 options = {
   :output   => "#{ENV['HOME']}/Desktop/animated.gif",
   :reverse  => false,
@@ -43,7 +49,7 @@ parser = OptionParser.new do |opts|
 end
 
 parser.parse!
-args = *ARGV.join(" ")
+args = *ARGV.collect{|a| escape a}.join(" ")
 
 unless system("which convert 2>&1 > /dev/null")
   puts "You need to install ImageMagick first.\n\n"
