@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'optparse'
+require 'open-uri'
 
 def escape(str)
   String(str).gsub(/(?=[^a-zA-Z0-9_.\/\-\x7F-\xFF\n])/n, '\\').
@@ -49,7 +50,7 @@ parser = OptionParser.new do |opts|
 end
 
 parser.parse!
-files = *ARGV.collect{|a| escape a}
+files = *ARGV
 
 unless system("which convert 2>&1 > /dev/null")
   puts "You need to install ImageMagick first.\n\n"
@@ -62,6 +63,26 @@ unless files
   puts parser.help
   exit(1)
 end
+
+# WORKING WITH REMOTE FILES
+if files.first[0..3] == 'http'
+  path = "/tmp/downloaded-gifme.gif"
+  open(path, 'wb') do |file|
+    file << open(files.first).read
+  end
+
+  FileUtils.rm_rf "/tmp/gifme"
+  FileUtils.mkdir "/tmp/gifme"
+  system "cd /tmp/gifme && convert #{path} -coalesce frame_%d.gif"
+
+  files = Dir.entries("/tmp/gifme")
+  files.delete(".")
+  files.delete("..")
+  files = files.collect{|f| "/tmp/gifme/#{f}"}
+end
+
+# Escape spaces and all that jazz
+files = files.collect{|a| escape a}
 
 cmd  = "convert"
 cmd += " -delay #{options[:delay]}"

@@ -42,6 +42,12 @@ them to the animation so it looks like one smooth motion and back again.
 
     gifme FILES --reverse
 
+If you pass in a URL of a gif instead of FILES, we'll download that gif, split
+it into its constituent frames, and let you recreate it. For example, you could
+take a gif you find online and give it that `--reverse` look:
+
+    gifme http://tumblr.com/some-crazy.gif --reverse
+
 For other options, check out the help:
 
     gifme -h
