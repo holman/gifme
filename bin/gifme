@@ -4,12 +4,6 @@ require 'optparse'
 require 'open-uri'
 require 'fileutils'
 
-def escape(str)
-  String(str).gsub(/(?=[^a-zA-Z0-9_.\/\-\x7F-\xFF\n])/n, '\\').
-              gsub(/\n/,"'\n'").
-              sub(/^$/,"''")
-end
-
 options = {
   :output   => "#{ENV['HOME']}/Desktop/animated.gif",
   :reverse  => false,
@@ -82,29 +76,24 @@ if files.first[0..3] == 'http'
   files = files.collect{|f| "/tmp/gifme/#{f}"}
 end
 
-# Escape spaces and all that jazz
-files = files.collect{|a| escape a}
-
-cmd  = "convert"
-cmd += " -delay #{options[:delay]}"
-cmd += " -loop 0"
-cmd += " -resize #{options[:width]}"
-cmd += " -layers OptimizeTransparency"
-cmd += " #{files.join(' ')}"
+cmd  = ["convert"]
+cmd << "-delay"  << options[:delay].to_s
+cmd << "-loop"   << "0"
+cmd << "-resize" << options[:width].to_s
+cmd << "-layers" << "OptimizeTransparency"
+cmd += files
 
 if options[:reverse]
-  files = files.drop(1)         # we don't want to dupe the end
-  files = files.reverse
-  files = files.drop(1)         # we don't want to dupe the middle
-  cmd += " #{files.join(' ')}"
+  cmd += files.reverse[1..-2]
 end
 
-cmd += " #{options[:output]}"
+cmd << options[:output]
 
-if system(cmd)
+if system(*cmd)
   puts "You now have a handsome animation at #{options[:output]}"
 else
   puts "Something broke when we were animating your gif. Shit."
+  exit(1)
 end
 
 if options[:cloudapp]
