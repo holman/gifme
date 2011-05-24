@@ -48,6 +48,11 @@ take a gif you find online and give it that `--reverse` look:
 
     gifme http://tumblr.com/some-crazy.gif --reverse
 
+You can also resize shit. We default to 500 pixels, but do whatever the fuck
+you want.
+
+    gifme http://tumblr.com/some-crazy.gif --width=1000
+
 For other options, check out the help:
 
     gifme -h

@@ -2,6 +2,7 @@
 
 require 'optparse'
 require 'open-uri'
+require 'fileutils'
 
 def escape(str)
   String(str).gsub(/(?=[^a-zA-Z0-9_.\/\-\x7F-\xFF\n])/n, '\\').
@@ -12,7 +13,7 @@ end
 options = {
   :output   => "#{ENV['HOME']}/Desktop/animated.gif",
   :reverse  => false,
-  :resize   => true,
+  :width    => 500,
   :delay    => 20,
   :cloudapp => system("which cloudapp 2>&1 > /dev/null")
 }
@@ -39,8 +40,8 @@ parser = OptionParser.new do |opts|
     options[:delay] = delay
   end
 
-  opts.on("--noresize", "Don't resize the final animation (set to 500px wide)") do |nrs|
-    options[:resize] = false
+  opts.on("-w", "--width PIXELS", "Set the width of the image (default is 500px)") do |width|
+    options[:width] = width
   end
 
   opts.on("-h", "--help", "Show this message") do
@@ -87,7 +88,7 @@ files = files.collect{|a| escape a}
 cmd  = "convert"
 cmd += " -delay #{options[:delay]}"
 cmd += " -loop 0"
-cmd += " -resize 500"                   if options[:resize]
+cmd += " -resize #{options[:width]}"
 cmd += " -layers OptimizeTransparency"
 cmd += " #{files.join(' ')}"
 
