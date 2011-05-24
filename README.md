@@ -1,5 +1,7 @@
 # gifme
 
+![pug](http://f.cl.ly/items/0T0f2w2C2z3T343w0u37/pug.gif)
+
 ## Fucking animations. You need them.
 
 gifme is a simple command line tool to generate animated GIFs.
