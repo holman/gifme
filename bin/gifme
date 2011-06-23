@@ -7,6 +7,8 @@ require 'fileutils'
 options = {
   :output   => "#{ENV['HOME']}/Desktop/animated.gif",
   :reverse  => false,
+  :small    => false,
+  :large    => false,
   :width    => 500,
   :delay    => 20,
   :cloudapp => system("which cloudapp 2>&1 > /dev/null")
@@ -36,6 +38,14 @@ parser = OptionParser.new do |opts|
 
   opts.on("-w", "--width PIXELS", "Set the width of the image (default is 500px)") do |width|
     options[:width] = width
+  end
+  
+  opts.on("-s", "--small", "Set the width to the most narrow image") do |small|
+    options[:small] = true
+  end
+
+  opts.on("-l", "--large", "Set the width to the widest image") do |large|
+    options[:large] = true
   end
 
   opts.on("-h", "--help", "Show this message") do
@@ -74,6 +84,16 @@ if files.first[0..3] == 'http'
   files.delete(".")
   files.delete("..")
   files = files.collect{|f| "/tmp/gifme/#{f}"}
+end
+
+if (options[:small] || options[:large])
+  widths = []
+  files.each do |file| 
+    filename = file.dup.gsub(/([^A-Za-z0-9_\-,:\/@\n])/n, "\\\\\\1")
+    width = `identify -format %w #{filename}`
+    widths << width
+  end
+  options[:width] = options[:small] ? widths.min : widths.max
 end
 
 cmd  = ["convert"]
