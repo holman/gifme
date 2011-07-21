@@ -1,6 +1,6 @@
 # gifme
 
-![pug](http://f.cl.ly/items/0T0f2w2C2z3T343w0u37/pug.gif)
+![tom](http://dl.dropbox.com/u/18369/gifs/00003e94.gif)
 
 ## Fucking animations. You need them.
 
