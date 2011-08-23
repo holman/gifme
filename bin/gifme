@@ -68,7 +68,7 @@ if files.first[0..3] == 'http'
 
   FileUtils.rm_rf "/tmp/gifme"
   FileUtils.mkdir "/tmp/gifme"
-  system "cd /tmp/gifme && convert #{path} -coalesce frame_%d.gif"
+  system "cd /tmp/gifme && convert #{path} -coalesce frame_%03d.gif"
 
   files = Dir.entries("/tmp/gifme")
   files.delete(".")
