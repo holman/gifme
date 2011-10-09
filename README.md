@@ -16,6 +16,10 @@ You'll also need to install ImageMagick. On OS X, this is easy using Homebrew:
 
     brew install imagemagick
 
+If you want to capture photos using your Mac's iSight camera
+
+    brew install imagesnap
+
 ## Usage
 
     gifme ~/Desktop/1.png ~/Desktop/2.png
