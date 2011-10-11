@@ -4,12 +4,15 @@ require 'optparse'
 require 'open-uri'
 require 'fileutils'
 
+timestamp = DateTime.now.strftime(fmt='%F_%Hh-%Mm-%Ss')
+
 options = {
-  :output   => "#{ENV['HOME']}/Desktop/animated.gif",
+  :output   => "#{ENV['HOME']}/Desktop/animated-#{timestamp}.gif",
   :reverse  => false,
   :width    => 500,
   :delay    => 20,
-  :cloudapp => system("which cloudapp 2>&1 > /dev/null")
+  :cloudapp => system("which cloudapp 2>&1 > /dev/null"),
+  :isight   => 0
 }
 
 parser = OptionParser.new do |opts|
@@ -18,6 +21,7 @@ parser = OptionParser.new do |opts|
   opts.separator ""
   opts.separator "  FILES can be listed out, like `file1.jpg file2.jpg`, or it"
   opts.separator "  can be a normal shell glob, like `*.jpg`."
+  opts.separator "  *Note:* If you're using iSight, you don't need to specify FILES."
 
   opts.separator ""
   opts.separator "Options:"
@@ -38,6 +42,10 @@ parser = OptionParser.new do |opts|
     options[:width] = width
   end
 
+  opts.on("-i", "--isight NUMBER", "Use the iSight camera (2 second delay per capture)") do |isight|
+    options[:isight] = isight
+  end
+
   opts.on("-h", "--help", "Show this message") do
     puts opts
     exit
@@ -52,6 +60,41 @@ unless system("which convert 2>&1 > /dev/null")
   puts "If you're on a Mac, this should be as easy as:"
   puts "  brew install imagemagick"
   exit(1)
+end
+
+unless system("which imagesnap 2>&1 > /dev/null")
+  puts "You need to install ImageSnap first.\n\n"
+  puts "If you're on a Mac, this should be as easy as:"
+  puts "  brew install imagesnap"
+  exit(1)
+end
+
+if options[:isight].to_i > 0
+  isights = options[:isight].to_i
+  isight_path = "/tmp/isight"
+
+  # snap the pictures
+  FileUtils.rm_rf isight_path
+  FileUtils.mkdir isight_path
+
+  isights = options[:isight].to_i
+
+  puts "You have 2 seconds to prepare yourself!"
+
+  for i in 1..isights
+    puts "counting down... 2"
+    sleep(1)
+    puts "counting down... 1"
+    sleep(1)
+    puts "Taking iSight snapshot #{i} of #{isights}"
+    system "cd #{isight_path} && imagesnap #{isight_path}/snapshot-#{i}.jpg"
+  end
+
+  # use them
+  files = Dir.entries(isight_path)
+  files.delete(".")
+  files.delete("..")
+  files = files.collect{|f| "#{isight_path}/#{f}"}
 end
 
 unless files
