@@ -21,7 +21,6 @@ parser = OptionParser.new do |opts|
   opts.separator ""
   opts.separator "  FILES can be listed out, like `file1.jpg file2.jpg`, or it"
   opts.separator "  can be a normal shell glob, like `*.jpg`."
-  opts.separator "  *Note:* If you're using iSight, you don't need to specify FILES."
 
   opts.separator ""
   opts.separator "Options:"
