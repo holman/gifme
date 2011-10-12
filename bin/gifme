@@ -4,7 +4,7 @@ require 'optparse'
 require 'open-uri'
 require 'fileutils'
 
-timestamp = DateTime.now.strftime(fmt='%F_%Hh-%Mm-%Ss')
+timestamp = Time.now.strftime(fmt='%F_%Hh-%Mm-%Ss')
 
 options = {
   :output   => "#{ENV['HOME']}/Desktop/animated-#{timestamp}.gif",
