@@ -57,6 +57,11 @@ you want.
 
     gifme http://tumblr.com/some-crazy.gif --width=1000
 
+You can also trigger a slew of images with your iSight:
+
+    gifme -i 5
+    # (takes five iSight photos)
+
 For other options, check out the help:
 
     gifme -h
