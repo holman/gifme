@@ -11,7 +11,6 @@ options = {
   :reverse  => false,
   :width    => 500,
   :delay    => 20,
-  :cloudapp => system("which cloudapp 2>&1 > /dev/null"),
   :isight   => 0
 }
 
@@ -45,6 +44,10 @@ parser = OptionParser.new do |opts|
     options[:isight] = isight
   end
 
+  opts.on("-u", "--upload", "Upload the image to cloudapp") do |cloudapp|
+    options[:cloudapp] = cloudapp
+  end
+
   opts.on("-h", "--help", "Show this message") do
     puts opts
     exit
@@ -65,6 +68,12 @@ unless system("which imagesnap 2>&1 > /dev/null")
   puts "You need to install ImageSnap first.\n\n"
   puts "If you're on a Mac, this should be as easy as:"
   puts "  brew install imagesnap"
+  exit(1)
+end
+
+unless system("which cloudapp 2>&1 > /dev/null")
+  puts "You need to install cloudapp gem first.\n\n"
+  puts "  gem install cloudapp"
   exit(1)
 end
 
@@ -140,5 +149,5 @@ end
 
 if options[:cloudapp]
   puts "Now we're uploading it to CloudApp"
-  system "cloudapp #{options[:output]}"
+  system "cloudapp upload #{options[:output]}"
 end

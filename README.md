@@ -20,6 +20,10 @@ If you want to capture photos using your Mac's iSight camera
 
     brew install imagesnap
 
+To upload your sexy animations to cloudapp, install the gem:
+
+    gem install cloudapp
+
 ## Usage
 
     gifme ~/Desktop/1.png ~/Desktop/2.png
@@ -29,13 +33,6 @@ You can also glob, of course:
 
     gifme ~/Desktop/*.jpg
     You now have a handsome animation at ~/Desktop/animated.gif
-
-## CloudApp
-
-Once your animation is finished up, we'll try to upload it to
-[CloudApp](http://www.getcloudapp.com). If you have my
-[`cloudapp`](https://github.com/holman/dotfiles/blob/master/bin/cloudapp)
-script installed, we'll use that, otherwise we'll just skip this whole step.
 
 ## Super Advanced Usage
 
