@@ -13,7 +13,7 @@ def name
 end
 
 def version
-  "0.0.7"
+  "0.0.8"
 end
 
 def date
