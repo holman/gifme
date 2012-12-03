@@ -1,0 +1,30 @@
+#!/bin/sh
+#
+# COMMAND LINE ANIMATIONS WOOHOO
+# https://github.com/holman/gifme
+#
+#
+#/ USAGE: gifme FILES [<options>]
+#/
+#/ Options:
+#/   - r: Adds a reversing effect after the initial animation.
+#/
+#/ Examples:
+#/
+#/   # Animate a group of files
+#/   gifme ~/Desktop/images
+#/
+#/   # Animate from a movie
+#/   gifme ~/Desktop/movie.mp4 <start> <duration>
+#/
+#/   # Animate a YouTube (eventually)
+#/   gifme http://www.youtube.com/watch?v=-Zzh79J2fC0
+
+set -e
+set -o posix
+
+# Print help/usage with no pattern/args
+test $# -eq 0 -o "$1" = "--help" && {
+    cat $0 | grep '^#/' | cut -c4-
+    exit 0
+}

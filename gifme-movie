@@ -1,0 +1,41 @@
+#!/bin/sh
+#
+# Handles movie deconstruction to hand off to `gifme`. You probably want to
+# use `gifme` instead of running this script directly, since this doesn't
+# handle animations.
+#
+#
+#/ USAGE: gifme-movie <file> <time> <duration>
+#/
+#/   file -     The path to the movie we're converting.
+#/   time -     The start time of the finished product.
+#/              This can be in seconds, or it also accepts the
+#/              "hh:mm:ss[.xxx]" format.
+#/   duration - The duration of the video sequence.
+#/              This can be in seconds, or it also accepts the
+#/              "hh:mm:ss[.xxx]" format.
+#/
+#/ Examples:
+#/
+#/   gifme-movie <path> <start-time> <duration>
+#/   ~/Desktop/dr-strangelove.mp4 23:12 3
+#/   ~/Desktop/holman-backflip-on-fire.mov 3.9 1.75
+#/
+
+set -e
+set -o posix
+
+# Print help/usage with no pattern/args
+test $# -eq 0 -o "$1" = "--help" && {
+    cat $0 | grep '^#/' | cut -c4-
+    exit 0
+}
+
+# Cleanup
+rm -rf /tmp/movieme
+
+# Create tmp dir
+mkdir -p /tmp/movieme
+
+# Split the movie into constituent frames
+ffmpeg -i $1 -f image2 -ss $2 -t $3 -r 7 /tmp/movieme/d-%05d.png > /tmp/gifme-movie 2>&1 /dev/null
