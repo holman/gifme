@@ -4,6 +4,15 @@ require 'optparse'
 require 'open-uri'
 require 'fileutils'
 
+def info(message)
+  io = $stdout.tty? ? $stdout : $stderr
+  io.puts message
+end
+
+def error(message)
+  $stderr.puts message
+end
+
 timestamp = Time.now.strftime(fmt='%F_%Hh-%Mm-%Ss')
 
 options = {
@@ -41,7 +50,7 @@ parser = OptionParser.new do |opts|
   end
 
   opts.on("-h", "--help", "Show this message") do
-    puts opts
+    info opts
     exit
   end
 end
@@ -50,14 +59,14 @@ parser.parse!
 files = *ARGV
 
 unless system("which convert 2>&1 > /dev/null")
-  puts "You need to install ImageMagick first.\n\n"
-  puts "If you're on a Mac, this should be as easy as:"
-  puts "  brew install imagemagick"
+  error "You need to install ImageMagick first.\n\n" +
+         "If you're on a Mac, this should be as easy as:" +
+         "  brew install imagemagick"
   exit(1)
 end
 
 unless files
-  puts parser.help
+  error parser.help
   exit(1)
 end
 
@@ -92,13 +101,18 @@ end
 cmd << options[:output]
 
 if system(*cmd)
-  puts "You now have a handsome animation at #{options[:output]}"
+  info "You now have a handsome animation at #{options[:output]}"
 else
-  puts "Something broke when we were animating your gif. Shit."
+  error "Something broke when we were animating your gif. Shit."
   exit(1)
 end
 
+unless $stdout.tty?
+  $stdout.puts options[:output]
+  exit
+end
+
 if options[:cloudapp]
-  puts "Now we're uploading it to CloudApp"
+  info "Now we're uploading it to CloudApp"
   system "cloudapp #{options[:output]}"
 end
