@@ -16,10 +16,6 @@ You'll also need to install ImageMagick. On OS X, this is easy using Homebrew:
 
     brew install imagemagick
 
-If you want to capture photos using your Mac's iSight camera
-
-    brew install imagesnap
-
 ## Usage
 
     gifme ~/Desktop/1.png ~/Desktop/2.png
@@ -56,11 +52,6 @@ You can also resize shit. We default to 500 pixels, but do whatever the fuck
 you want.
 
     gifme http://tumblr.com/some-crazy.gif --width=1000
-
-You can also trigger a slew of images with your iSight:
-
-    gifme -i 5
-    # (takes five iSight photos)
 
 For other options, check out the help:
 
