@@ -18,8 +18,8 @@
 #/ Examples:
 #/
 #/   gifme-movie <path> <start-time> <duration>
-#/   ~/Desktop/dr-strangelove.mp4 23:12 3
-#/   ~/Desktop/holman-backflip-on-fire.mov 3.9 1.75
+#/   gifme-movie ~/Desktop/dr-strangelove.mp4 23:12 3
+#/   gifme-movie ~/Desktop/holman-backflip-on-fire.mov 3.9 1.75
 #/
 
 set -e
