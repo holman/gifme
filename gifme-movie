@@ -31,11 +31,30 @@ test $# -eq 0 -o "$1" = "--help" && {
     exit 0
 }
 
+# Should we actually run ffmpeg?
+noop=false
+
+# Get and set options
+while getopts n opt; do
+  case "$opt" in
+    n)  noop=true;;
+  esac
+done
+
 # Cleanup
-rm -rf /tmp/movieme
+rm -rf /tmp/gifme-movie
 
 # Create tmp dir
-mkdir -p /tmp/movieme
+mkdir -p /tmp/gifme-movie
 
 # Split the movie into constituent frames
-ffmpeg -i $1 -f image2 -ss $2 -t $3 -r 7 /tmp/movieme/d-%05d.png > /tmp/gifme-movie 2>&1 /dev/null
+cmd='ffmpeg -i $1 -f image2 -ss $2 -t $3 -r 7 /tmp/gifme-movie/d-%05d.png > /tmp/gifme-movie.log 2>&1 /dev/null'
+
+# If we're in test, don't actually run the command
+if $noop
+then
+  echo $cmd
+  exit 0
+fi
+
+$($cmd)
