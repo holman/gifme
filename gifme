@@ -4,7 +4,7 @@
 # https://github.com/holman/gifme
 #
 #
-#/ USAGE: gifme FILES [<options>]
+#/ USAGE: gifme [<options>] FILES
 #/
 #/ Options:
 #/   - r: Adds a reversing effect after the initial animation.
@@ -28,3 +28,24 @@ test $# -eq 0 -o "$1" = "--help" && {
     cat $0 | grep '^#/' | cut -c4-
     exit 0
 }
+
+# Should we actually run ffmpeg?
+noop=false
+
+# Get and set options
+while getopts n opt; do
+  case "$opt" in
+    n)  noop=true;;
+  esac
+done
+
+cmd='cmd'
+
+# If we're in test, don't actually run the command
+if $noop
+then
+  echo $cmd
+  exit 0
+fi
+
+$($cmd)
