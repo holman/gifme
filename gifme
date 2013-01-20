@@ -11,7 +11,7 @@
 #/
 #/ Examples:
 #/
-#/   # Animate a group of files
+#/   # Animate a directory of files
 #/   gifme ~/Desktop/images
 #/
 #/   # Animate from a movie
@@ -41,11 +41,16 @@ noop=false
 # Get and set options
 while getopts n opt; do
   case "$opt" in
-    n)  noop=true;;
+    n)  shift; noop=true;;
   esac
 done
 
-cmd='convert $@ -delay 0 -loop 0 -resize 500 -layers OptimizeTransparency ~/Desktop/animation.gif'
+output='~/Desktop/animation.gif'
+
+# Grab all the files in the given directory to animate
+files=$(ls $1/*)
+
+cmd="convert -delay 0 -loop 0 -resize 500 -layers OptimizeTransparency $files $output"
 
 # If we're in test, don't actually run the command
 if $noop
@@ -54,4 +59,4 @@ then
   exit 0
 fi
 
-$($cmd)
+$(eval $cmd)
