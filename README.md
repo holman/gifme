@@ -56,6 +56,10 @@ you want.
 For other options, check out the help:
 
     gifme -h
+    
+### Gif From My Movie Please
+
+I've taken care of this already too. It [lives in my dotfiles](https://github.com/holman/dotfiles/blob/master/bin/movieme)
 
 ## History
 
