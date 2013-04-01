@@ -15,6 +15,7 @@ options = {
 }
 
 parser = OptionParser.new do |opts|
+  opts.version = "0.0.8"
   opts.banner = "Usage: gifme [options] FILES"
 
   opts.separator ""
@@ -39,7 +40,12 @@ parser = OptionParser.new do |opts|
   opts.on("-w", "--width PIXELS", "Set the width of the image (default is 500px)") do |width|
     options[:width] = width
   end
-
+  
+  opts.on("-v", "--version", "Shows the program version") do
+    puts "gifme " + opts.version
+    exit
+  end
+  
   opts.on("-h", "--help", "Show this message") do
     puts opts
     exit
