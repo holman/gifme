@@ -11,7 +11,8 @@ options = {
   :reverse  => false,
   :width    => 500,
   :delay    => 20,
-  :cloudapp => system("which cloudapp 2>&1 > /dev/null")
+  :cloudapp => system("which cloudapp 2>&1 > /dev/null"),
+  :quiet    => false,
 }
 
 parser = OptionParser.new do |opts|
@@ -44,6 +45,10 @@ parser = OptionParser.new do |opts|
   opts.on("-v", "--version", "Shows the program version") do
     puts "gifme " + opts.version
     exit
+  end
+  
+  opts.on("-q", "--quiet", "Don't print status messages to stdout") do
+    options[:quiet] = true
   end
   
   opts.on("-h", "--help", "Show this message") do
@@ -98,13 +103,17 @@ end
 cmd << options[:output]
 
 if system(*cmd)
-  puts "You now have a handsome animation at #{options[:output]}"
+  unless options[:quiet]
+    puts "You now have a handsome animation at #{options[:output]}"
+  end
 else
   puts "Something broke when we were animating your gif. Shit."
   exit(1)
-end
+end  
 
 if options[:cloudapp]
-  puts "Now we're uploading it to CloudApp"
-  system "cloudapp #{options[:output]}"
+  unless options[:quiet]
+    puts "Now we're uploading it to CloudApp"
+    system "cloudapp #{options[:output]}"
+  end
 end
