@@ -67,7 +67,7 @@ unless system("which convert 2>&1 > /dev/null")
   exit(1)
 end
 
-unless files
+unless files && files.size != 0
   puts parser.help
   exit(1)
 end
