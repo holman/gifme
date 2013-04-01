@@ -17,7 +17,7 @@ options = {
 
 parser = OptionParser.new do |opts|
   opts.version = "0.0.8"
-  opts.banner = "Usage: gifme [options] FILES"
+  opts.banner = "Usage: gifme [-h] [-r] [-o /path/to/output] [-d DELAY] [-w PIXELS] [-q] [-v] FILES [FILES ...]"
 
   opts.separator ""
   opts.separator "  FILES can be listed out, like `file1.jpg file2.jpg`, or it"
