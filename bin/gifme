@@ -3,6 +3,7 @@
 require 'optparse'
 require 'open-uri'
 require 'fileutils'
+require 'base64'
 
 timestamp = Time.now.strftime(fmt='%F_%Hh-%Mm-%Ss')
 
@@ -12,6 +13,7 @@ options = {
   :width    => 500,
   :delay    => 20,
   :cloudapp => system("which cloudapp 2>&1 > /dev/null"),
+  :dropbox => system("which dropbox 2>&1 > /dev/null"),
   :quiet    => false,
 }
 
@@ -41,16 +43,16 @@ parser = OptionParser.new do |opts|
   opts.on("-w", "--width PIXELS", "Set the width of the image (default is 500px)") do |width|
     options[:width] = width
   end
-  
+
   opts.on("-v", "--version", "Shows the program version") do
     puts "gifme " + opts.version
     exit
   end
-  
+
   opts.on("-q", "--quiet", "Don't print status messages to stdout") do
     options[:quiet] = true
   end
-  
+
   opts.on("-h", "--help", "Show this message") do
     puts opts
     exit
@@ -109,11 +111,19 @@ if system(*cmd)
 else
   puts "Something broke when we were animating your gif. Shit."
   exit(1)
-end  
+end
 
 if options[:cloudapp]
   unless options[:quiet]
     puts "Now we're uploading it to CloudApp"
     system "cloudapp #{options[:output]}"
   end
+end
+
+if options[:dropbox]
+  puts "Now we're uploading it to dropbox"
+  path = Base64.decode64 open("#{ENV['HOME']}/.dropbox/host.db").read.split("\n")[1]
+  gif_file = "#{path}/Public/#{options[:output].split("/")[-1]}"
+  system "ln -s #{options[:output]} #{gif_file}"
+  system "dropbox puburl #{gif_file}"
 end
