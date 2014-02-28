@@ -30,7 +30,7 @@ parser = OptionParser.new do |opts|
     options[:reverse] = true
   end
 
-  opts.on("-o", "--output /path/to/output", "Set the animation's output directory") do |out|
+  opts.on("-o", "--output /path/to/output.gif", "Set the path to the animation's output") do |out|
     options[:output] = out
   end
 
