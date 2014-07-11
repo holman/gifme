@@ -12,6 +12,7 @@ options = {
   :width    => 500,
   :delay    => 20,
   :cloudapp => system("which cloudapp 2>&1 > /dev/null"),
+  :direct   => false,
   :quiet    => false,
 }
 
@@ -41,16 +42,20 @@ parser = OptionParser.new do |opts|
   opts.on("-w", "--width PIXELS", "Set the width of the image (default is 500px)") do |width|
     options[:width] = width
   end
-  
+
   opts.on("-v", "--version", "Shows the program version") do
     puts "gifme " + opts.version
     exit
   end
-  
+
+  opts.on("-t", "--direct", "Retrieves direct link to asset on Cloudapp") do
+    options[:direct] = true
+  end
+
   opts.on("-q", "--quiet", "Don't print status messages to stdout") do
     options[:quiet] = true
   end
-  
+
   opts.on("-h", "--help", "Show this message") do
     puts opts
     exit
@@ -109,11 +114,14 @@ if system(*cmd)
 else
   puts "Something broke when we were animating your gif. Shit."
   exit(1)
-end  
+end
 
 if options[:cloudapp]
   unless options[:quiet]
     puts "Now we're uploading it to CloudApp"
-    system "cloudapp #{options[:output]}"
+    cloudapp_cmd = ["cloudapp"]
+    cloudapp_cmd << "--direct" if options[:direct]
+    cloudapp_cmd << options[:output]
+    system cloudapp_cmd.join(" ")
   end
 end
